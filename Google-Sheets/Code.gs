@@ -44,9 +44,17 @@ function getAppState() {
   return { hasApiKey: !!key };
 }
 
+function isValidApiKeyFormat_(key) {
+  if (key === 'guest:guest') return true;
+  return /^[A-Za-z0-9]{8,64}:[A-Za-z0-9]{8,64}$/.test(key);
+}
+
 function saveApiKey(key) {
   key = String(key || '').trim();
   if (!key) throw new Error('Please enter a valid Trading Economics API key.');
+  if (!isValidApiKeyFormat_(key)) {
+    throw new Error('Invalid API key format. Use guest:guest or a key in the format alphanumeric:alphanumeric (for example abc123def456ghi7:xyz987uvw654rst). Get an API key at https://developer.tradingeconomics.com/');
+  }
   PropertiesService.getUserProperties().setProperty('TE_API_KEY', key);
   return { success: true };
 }
