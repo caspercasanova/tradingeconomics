@@ -805,14 +805,13 @@ function runSelectedAction() {
 }
 
 function isApiKeyFormatValid(key) {
-  if (key === 'guest:guest') return true;
   return /^[A-Za-z0-9]{8,64}:[A-Za-z0-9]{8,64}$/.test(key);
 }
 
 function saveFirstKey() {
   const key = $('apiKeyInput').value.trim();
   if (!isApiKeyFormatValid(key)) {
-    alert('Invalid API key format. Use guest:guest or a key in the format alphanumeric:alphanumeric (for example abc123def456ghi7:xyz987uvw654rst). Get an API key at https://developer.tradingeconomics.com/');
+    alert('Invalid API key format. Expected alphanumeric:alphanumeric (for example abc123def456ghi7:xyz987uvw654rst). Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.');
     return;
   }
   showSpinner();
@@ -842,7 +841,7 @@ function saveFirstKey() {
 function updateKey() {
   const key = $('newApiKeyInput').value.trim();
   if (!isApiKeyFormatValid(key)) {
-    alert('Invalid API key format. Use guest:guest or a key in the format alphanumeric:alphanumeric (for example abc123def456ghi7:xyz987uvw654rst). Get an API key at https://developer.tradingeconomics.com/');
+    alert('Invalid API key format. Expected alphanumeric:alphanumeric (for example abc123def456ghi7:xyz987uvw654rst). Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.');
     return;
   }
   showSpinner();
