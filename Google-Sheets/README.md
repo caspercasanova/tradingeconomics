@@ -118,4 +118,4 @@ Full API reference and usage guides: **[docs.tradingeconomics.com](https://docs.
 
 ## API Access
 
-Learn about plans and get your API key: **[tradingeconomics.com/analytics/api.aspx](https://tradingeconomics.com/analytics/pricing.aspx?source=google-sheets)**
+Learn about plans and get your API key: **[tradingeconomics.com/api/pricing.aspx](https://tradingeconomics.com/api/pricing.aspx?source=google-sheets)**
