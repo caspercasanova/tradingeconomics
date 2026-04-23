@@ -20,8 +20,8 @@
 
 ```
 1 - Put your client key.
-2 - A test key will only give you access to a sample of countries.
-3 - Press "No Client Key" to just see a demo.
+2 - Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.
+3 - Enter your API key to access data and charts.
 ```
 
 ![clientKey](./images/clientKey.png)

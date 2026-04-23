@@ -11,7 +11,7 @@
         TogetatestkeygotoLabel         matlab.ui.control.Label
         TestKeyButton                  matlab.ui.control.Button
         NoClientKeyButton              matlab.ui.control.Button
-        IfyouwantademopresshereLabel   matlab.ui.control.Label
+        SubscriptionrequiredforAPIaccessLabel   matlab.ui.control.Label
         VisitusatLabel                 matlab.ui.control.Label
         tradingeconomicscomButton      matlab.ui.control.Button
         LogOutButton                   matlab.ui.control.Button
@@ -161,47 +161,8 @@
 
         % Button pushed function: NoClientKeyButton
         function NoClientKeyButtonPushed(app, event)
-            
-            url = 'https://api.tradingeconomics.com/historical/country/united states/indicator/gdp?c=guest:guest';
-            data = webread(url);
-            transpose({data.Category})
-            transpose({data.Country})
-            app.ChooseCountryDropDown.Items = {data.Country}
-            app.ChooseIndicatorDropDown.Items = {data.Category};
-         
-            dn = []
-            for k = [1:length(data)]
-               disp(data(k));
-               disp('')
-               dn(k) =  datenum(data(k).DateTime, 'yyyy-mm-dd');
-            end
-            x = dn;
-            y = [data.Value];
-            cla(app.UIAxes,'reset');
-            grid(app.UIAxes);
-            if isequal(app.TypeofchartDropDown.Value ,'Line')
-                plot(app.UIAxes,x, y,'--g');
-                datetick(app.UIAxes,'x' ,10, 'keepticks');
-                title(app.UIAxes,'United States');
-                xlabel(app.UIAxes,'GDP');
-            elseif isequal(app.TypeofchartDropDown.Value, 'Bar')
-                bar(app.UIAxes,x, y,  "b");
-                datetick(app.UIAxes,'x' ,10,'keeplimits', 'keepticks');
-                title(app.UIAxes,'United States');
-                xlabel(app.UIAxes,'GDP');
-            elseif isequal(app.TypeofchartDropDown.Value, 'Stem')
-                stem(app.UIAxes,x, y);
-                datetick(app.UIAxes,'x' ,10, 'keepticks');
-                title(app.UIAxes,'United States');
-                xlabel(app.UIAxes,'GDP');
-            elseif isequal(app.TypeofchartDropDown.Value ,'Histogram') 
-                histogram2(app.UIAxes,x, y, 'FaceColor','flat');
-                datetick(app.UIAxes,'x' ,10, 'keepticks');
-                title(app.UIAxes,'United States');
-                xlabel(app.UIAxes,'GDP');
-            end
-            
-            hold(app.UIAxes);
+            url = 'https://tradingeconomics.com/api/pricing.aspx';
+            web(url);
             
         end
 
@@ -213,7 +174,7 @@
 
         % Button pushed function: TestKeyButton
         function TestKeyButtonPushed(app, event)
-            url = 'https://developer.tradingeconomics.com';
+            url = 'https://tradingeconomics.com/api/pricing.aspx';
             web(url);
         end
 
@@ -298,27 +259,27 @@
             app.TogetatestkeygotoLabel = uilabel(app.LeftPanel);
             app.TogetatestkeygotoLabel.FontName = 'Montserrat';
             app.TogetatestkeygotoLabel.Position = [62 258 144 22];
-            app.TogetatestkeygotoLabel.Text = 'To get a test key go to:';
+            app.TogetatestkeygotoLabel.Text = 'To get an API key go to:';
 
             % Create TestKeyButton
             app.TestKeyButton = uibutton(app.LeftPanel, 'push');
             app.TestKeyButton.ButtonPushedFcn = createCallbackFcn(app, @TestKeyButtonPushed, true);
             app.TestKeyButton.FontName = 'Montserrat';
             app.TestKeyButton.Position = [40 234 187 23];
-            app.TestKeyButton.Text = 'Test Key';
+            app.TestKeyButton.Text = 'API Pricing';
 
             % Create NoClientKeyButton
             app.NoClientKeyButton = uibutton(app.LeftPanel, 'push');
             app.NoClientKeyButton.ButtonPushedFcn = createCallbackFcn(app, @NoClientKeyButtonPushed, true);
             app.NoClientKeyButton.FontName = 'Montserrat';
             app.NoClientKeyButton.Position = [40 175 187 23];
-            app.NoClientKeyButton.Text = 'No Client Key';
+            app.NoClientKeyButton.Text = 'Get API Key';
 
-            % Create IfyouwantademopresshereLabel
-            app.IfyouwantademopresshereLabel = uilabel(app.LeftPanel);
-            app.IfyouwantademopresshereLabel.FontName = 'Montserrat';
-            app.IfyouwantademopresshereLabel.Position = [40 199 197 22];
-            app.IfyouwantademopresshereLabel.Text = 'If you want a demo, press here:';
+            % Create SubscriptionrequiredforAPIaccessLabel
+            app.SubscriptionrequiredforAPIaccessLabel = uilabel(app.LeftPanel);
+            app.SubscriptionrequiredforAPIaccessLabel.FontName = 'Montserrat';
+            app.SubscriptionrequiredforAPIaccessLabel.Position = [40 199 197 22];
+            app.SubscriptionrequiredforAPIaccessLabel.Text = 'Subscription is required for API access:';
 
             % Create VisitusatLabel
             app.VisitusatLabel = uilabel(app.LeftPanel);
