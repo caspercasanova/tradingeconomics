@@ -19,8 +19,8 @@ if $ask == 'y' || $ask =='Y'|| $ask =='yes'
     $client_key = prompt.mask("Your client key")
     puts "You are logged in!".green
 elsif $ask == 'n'|| $ask =='N'|| $ask =='no'
-    $client_key = 'guest:guest'
-    puts "Whithout a client key, only a sample of data will be provided!".red
+    puts "An API key is required. Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx".red
+    exit
 end        
 #class that holds the method with the definition of the main menu
 class Menu
