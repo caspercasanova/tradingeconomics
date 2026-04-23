@@ -11,9 +11,10 @@ session_key=options.key
 
 if session_key == '':
     
-    session_key = input('Please, Insert a key or press ENTER to use "guest:guest": ')
+    session_key = input('Please insert your API key. To get an API key, visit https://tradingeconomics.com/api/pricing.aspx: ')
     if session_key == '':
-        session_key='guest:guest'
+        print('No API key provided. You must subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx')
+        exit()
 
 
 session_operator = cl.Operator(session_key)
