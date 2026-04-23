@@ -29,12 +29,11 @@ The Trading Economics Excel Add-In installer can be downloaded here:
 
 ![Login](./images/login.png)
 
-* Place your Client key or "guest:guest"
+* Enter your Client key
 
 ![ClientKey](./images/login1.png)
 
-#### <strong>Note:</strong> If you don't have a client key it will default to guest:guest and a sample of data will be provided or you can get your free key here:
-[https://developer.tradingeconomics.com](https://developer.tradingeconomics.com)
+#### <strong>Note:</strong> If you don't have an API key, subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx and get an API key at: [https://developer.tradingeconomics.com](https://developer.tradingeconomics.com)
 
 #
 
@@ -55,7 +54,3 @@ The Trading Economics Excel Add-In installer can be downloaded here:
 ## Learn More
 
 https://tradingeconomics.com/analytics/api.aspx
-
-
-
-
