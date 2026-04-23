@@ -1,8 +1,8 @@
 import { TEClient} from 'tradingeconomics-stream'
 
 // Credentials
-let key = 'guest'
-let secret = 'guest'
+let key = ''
+let secret = ''
 
 if (process.env.apikey){
   const apikey = process.env.apikey
@@ -10,6 +10,10 @@ if (process.env.apikey){
     key = apikey.split(':')[0]
     secret = apikey.split(':')[1]
   }
+}
+
+if (!key || !secret) {
+  throw new Error('API key is required. Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.')
 }
 
 console.log("Credentials:", key)

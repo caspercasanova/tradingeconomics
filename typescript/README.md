@@ -13,8 +13,8 @@ import { TEClient} from 'tradingeconomics-stream'
 
 // Credentials
 
-let key = 'guest'
-let secret = 'guest'
+let key = ''
+let secret = ''
 
 if (process.env.apikey){
   const apikey = process.env.apikey
@@ -22,6 +22,10 @@ if (process.env.apikey){
     key = apikey.split(':')[0]
     secret = apikey.split(':')[1]
   }
+}
+
+if (!key || !secret) {
+  throw new Error('API key is required. Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.')
 }
 
 console.log("Credentials:", key)
@@ -64,21 +68,20 @@ tsc app.ts
 
 **Run the app**
 
-Please change the keys to yours to remove guest limitations
+Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.
 
 ```bash
-export key=guest
-export secret=guest 
+export apikey=your_key:your_secret
 node app.js
 ```
 #
 
 **Docker**
 
-Please pass your keys as environmental variables
+Please pass your API key as an environmental variable
 
 ```bash
-docker run --rm -it --init --name te-typescript -e key=guest -e secret=guest tradingeconomics/typescript:latest
+docker run --rm -it --init --name te-typescript -e apikey=your_key:your_secret tradingeconomics/typescript:latest
 ```
 #
 
