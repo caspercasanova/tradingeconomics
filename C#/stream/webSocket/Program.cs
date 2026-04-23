@@ -7,9 +7,9 @@ namespace webSocket
     {
         static void Main(string[] args)
         {
-            //only a single market topic "EURUSD:CUR" can subscribe using guest:guest
-            //For other markets or calendar topic "key:secret" is required
-            using (var ws = new WebSocket("ws://stream.tradingeconomics.com/?client=guest:guest"))
+            //only a single market topic "EURUSD:CUR" can subscribe using a valid API key
+            //For other markets or calendar topic "key:secret" is required. Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.
+            using (var ws = new WebSocket("ws://stream.tradingeconomics.com/?client=Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key."))
             {
 
                 ws.OnMessage += (sender, e) =>

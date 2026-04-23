@@ -33,6 +33,4 @@ Since there are .cs files for each area within the same solution, to run the des
 
 ## API Key
 
-To access the information, a common test key **guest:guest** has been applied. To use your own key, you must type it when asked in the begining of the program execution.
-
-You still can just press ENTER, without providing a API KEY. In this case, the aplication will make use of the default API Key **guest:guest** that is used as an example key. Keep in mind that the example API Key is limited to enable the user to have a taste on how the Trading Economics API works; therefore, this key comes with limitations and should not be used in a production environment.
+Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key. You can provide your key when prompted during program execution for full API access.

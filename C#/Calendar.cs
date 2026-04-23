@@ -10,12 +10,12 @@ namespace CSharpExamples
         /// <summary>
         /// Store the client key to be used through the program
         /// </summary>
-        static string _clientKey = "guest:guest";
+        static string _clientKey = "";
 
         static void Main(string[] args)
         {
             // set the client key
-            Console.WriteLine("\nProvide a API key; otherwise, press ENTER to use the default test key...");
+            Console.WriteLine("\nProvide an API key; otherwise subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key....");
 
             string k = Console.ReadLine();
             if (!string.IsNullOrWhiteSpace(k))

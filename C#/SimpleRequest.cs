@@ -9,8 +9,8 @@ namespace Examples.System.Net
         public static void Main()
         {
             // Create a request for the URL. 
-            // Replace guest:guest with your key.   
-            WebRequest request = WebRequest.Create("https://api.tradingeconomics.com/indicators?c=guest:guest");
+            // Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.   
+            WebRequest request = WebRequest.Create("https://api.tradingeconomics.com/indicators?c=Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.");
     
             // Get the response.  
             WebResponse response = request.GetResponse();
