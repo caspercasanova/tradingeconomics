@@ -39,7 +39,7 @@ install_github("tradingeconomics/tradingeconomics/R/tradingeconomics")
 library(tradingeconomics)
 ```
 * then do the loggin with your apikey or leave it blank 
-* **Note:** If you don't have a client key leave it blank and a sample of data will be provided or you can get your free key here: http://developer.tradingeconomics.com 
+* **Note:** Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key. 
 ```r
 login('users APIkey')
 ```

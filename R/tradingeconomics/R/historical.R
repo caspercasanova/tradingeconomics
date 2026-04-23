@@ -5,7 +5,7 @@ lower.Date <- function(country, indicator, apikey_local){
   url_base <- paste(base, paste(country, collapse = ','), 'indicator',
                     paste(indicator, collapse = ','), sep = '/')
   if (is.null(apikey_local))
-    credentials = 'guest:guest'
+    stop('API key is required. Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.')
   url <- paste(url_base, '?c=', apikey_local, sep = '')
   url <- URLencode(url)
   webData <-fromJSON(url)
