@@ -5,10 +5,9 @@ The Trading Economics Application Programming Interface (API) provides direct ac
 
 Learn more:
 
-[https://tradingeconomics.com/analytics/api.aspx](https://tradingeconomics.com/analytics/api.aspx)
+[https://tradingeconomics.com/api/pricing.aspx](https://tradingeconomics.com/api/pricing.aspx)
 
-#### <strong>Note:</strong> If you don't have a client key a sample of data will be provided or you can get your free key here:
-[https://developer.tradingeconomics.com](https://developer.tradingeconomics.com)
+#### <strong>Note:</strong> Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.
 
 
 #

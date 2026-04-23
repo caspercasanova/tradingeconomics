@@ -5,7 +5,7 @@
 $url = 'https://api.tradingeconomics.com/ratings';
 $headers = array(
     "Accept: application/xml",
-    "Authorization: Client guest:guest"
+    "Authorization: Client key:secret" // Replace with your API key:secret
 );
 $handle = curl_init(); 
     curl_setopt($handle, CURLOPT_URL, $url);

@@ -10,7 +10,7 @@ $urls = array(
 ); 
 $headers = array(
     "Accept: application/xml",
-    "Authorization: Client guest:guest"
+    "Authorization: Client key:secret" // Replace with your API key:secret
 );
 //An array that will contain all of the information
 //relating to each request.
