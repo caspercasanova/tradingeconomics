@@ -22,8 +22,9 @@ public class Streaming {
     public static void main(String[] args) {
         
         try {
+            // Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.
             // open websocket
-            final WebsocketClient client = new WebsocketClient(new URI("wss://stream.tradingeconomics.com/?client=guest:guest"));
+            final WebsocketClient client = new WebsocketClient(new URI("wss://stream.tradingeconomics.com/?client="));
             
             // add listener
             client.addMessageHandler(new WebsocketClient.MessageHandler() {
@@ -58,3 +59,4 @@ public class Streaming {
     }
     
 }
+

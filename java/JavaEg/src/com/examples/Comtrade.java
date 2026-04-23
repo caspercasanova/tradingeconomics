@@ -23,7 +23,7 @@ public class Comtrade
 
     public static void constructUrl(String path) throws IOException
     {
-        String _clientKey = "guest:guest";
+        String _clientKey = ""; // Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.
         String base_url = "https://api.tradingeconomics.com";
         String auth;
         if (path.contains("?"))
@@ -128,3 +128,5 @@ public class Comtrade
 
     }
 }
+
+

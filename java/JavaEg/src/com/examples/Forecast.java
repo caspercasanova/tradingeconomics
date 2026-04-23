@@ -21,7 +21,7 @@ public class Forecast
 
     public static void constructUrl(String path) throws IOException
     {
-        String _clientKey = "guest:guest";
+        String _clientKey = ""; // Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.
         String base_url = "http://api.tradingeconomics.com";
         String auth = base_url + path + "?c=" + _clientKey;
 
@@ -124,6 +124,8 @@ public class Forecast
     }
 
 }
+
+
 
 
 
