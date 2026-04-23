@@ -7,8 +7,7 @@ namespace webSocket
     {
         static void Main(string[] args)
         {
-            //only a single market topic "EURUSD:CUR" can subscribe using a valid API key
-            //For other markets or calendar topic "key:secret" is required. Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.
+            // Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.
             using (var ws = new WebSocket("ws://stream.tradingeconomics.com/?client=Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key."))
             {
 
