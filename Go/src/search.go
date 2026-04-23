@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-var apikey = "guest:guest" 
+var apikey = "" // Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key. 
 
 func main() {
 
@@ -32,4 +32,5 @@ func search(term string, category string) {
 	log.Println(string(body), "\n")
 
 }
+
 
