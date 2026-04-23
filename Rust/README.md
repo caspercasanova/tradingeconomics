@@ -15,8 +15,8 @@ Trading Economics provides its users with real time quotes, delayed feeds and hi
 1. ### Change client key:
 
 * On each folder example the main script will be inside of /src
-* In the main file you can change the client key in use. By default it is using our demo key.  
-* **Note:** If you don't have a client key leave it as 'guest:guest' and a sample of data will be provided or you can get your free key here: http://developer.tradingeconomics.com 
+* In the main file you can set the client key in use.
+* **Note:** Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.
 
 2. ### Build the project
 *  Enter on the main script path
@@ -64,6 +64,6 @@ Array [
 
 ## Learn More
 
-https://tradingeconomics.com/analytics/api.aspx
+https://tradingeconomics.com/api/pricing.aspx
 
 

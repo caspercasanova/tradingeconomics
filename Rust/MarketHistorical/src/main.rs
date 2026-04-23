@@ -1,7 +1,7 @@
 use std::error::Error;
 
 fn main() {
-    let client = "guest:guest";
+    let client = ""; // Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.
     let base = "http://api.tradingeconomics.com";
     let client_key:String  = String::from(client);
     let base_url:String = String::from(base);
