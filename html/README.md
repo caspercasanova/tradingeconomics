@@ -6,20 +6,20 @@ Trading Economics provides its users with real time quotes, delayed feeds and hi
 
 ## Usage
 
-* The HTML file has by default the demo key, it has some restrictions on the symbol that you can get.
-* If you already have a client key replace the key and secret variables.
+* Set your API key and secret in the HTML file before running the sample.
+* Please subscribe to a plan at https://tradingeconomics.com/api/pricing.aspx to get an API key.
 * Then change the topic for the one desired
 
 ```bash
 ws.send('{"topic": "subscribe", "to": "EURUSD:CUR"}');
 ```
 
-* **Note:** If you don't have a client key, you can get your free key here: http://developer.tradingeconomics.com 
+* **Note:** A valid API key and secret are required to use this stream sample.
 
 #
 
 ## Learn More
 
-https://tradingeconomics.com/analytics/api.aspx
+https://tradingeconomics.com/api/pricing.aspx
 
 
