@@ -47,7 +47,7 @@ The Trading Economics Excel Add-In installer can be downloaded here:
 
 ## Documentation
 
-[https://docs.tradingeconomics.com/excel/](https://docs.tradingeconomics.com/excel/)
+[https://docs.tradingeconomics.com/excel/](https://docs.tradingeconomics.com/excel/excel_desktop_addin/)
 
 #
 
