@@ -99,6 +99,56 @@
       margin-top: 4px;
     }
 
+    .search-dropdown-wrap {
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .search-input {
+      width: 100% !important;
+      box-sizing: border-box;
+      padding: 8px !important;
+      margin-bottom: 0 !important;
+      border-radius: 6px !important;
+      font-size: 14px !important;
+      border: 1px solid #ccc !important;
+    }
+
+    .search-dropdown-list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-top: none;
+      border-radius: 0 0 6px 6px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .search-dropdown-list.active {
+      display: block;
+    }
+
+    .search-dropdown-item {
+      padding: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .search-dropdown-item:hover {
+      background-color: #f0f0f0;
+    }
+
+    .search-dropdown-item.selected {
+      background-color: #e8f5e9;
+      font-weight: 600;
+    }
+
     .spinner-overlay {
       display: flex;
       justify-content: center;
@@ -217,6 +267,9 @@
 </div>
 
 <script>
+let COUNTRIES = [];
+let INDICATORS = [];
+
 const INITIAL_STATE = <?!= JSON.stringify(initialState || {}) ?>;
 
 let hasApiKey = false;
@@ -732,6 +785,89 @@ function renderActions() {
   renderFields();
 }
 
+function createCountryDropdown() {
+  return createSearchDropdown('country', COUNTRIES, 'Search countries...');
+}
+
+function createIndicatorDropdown() {
+  return createSearchDropdown('indicator', INDICATORS, 'Search indicators...');
+}
+
+function createSearchDropdown(fieldName, options, placeholder) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'search-dropdown-wrap';
+
+  const searchInput = document.createElement('input');
+  searchInput.className = 'search-input';
+  searchInput.id = 'field_' + fieldName;
+  searchInput.type = 'text';
+  searchInput.placeholder = placeholder || 'Search...';
+  searchInput.autocomplete = 'off';
+
+  const dropdownList = document.createElement('div');
+  dropdownList.className = 'search-dropdown-list';
+  dropdownList.id = 'dropdown-list-' + fieldName;
+
+  wrapper.appendChild(searchInput);
+  wrapper.appendChild(dropdownList);
+
+  searchInput.addEventListener('focus', function () {
+    renderSearchDropdown(fieldName, options, '');
+    dropdownList.classList.add('active');
+  });
+
+  searchInput.addEventListener('input', function () {
+    renderSearchDropdown(fieldName, options, this.value);
+    dropdownList.classList.add('active');
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!wrapper.contains(e.target)) {
+      dropdownList.classList.remove('active');
+    }
+  });
+
+  return wrapper;
+}
+
+function renderSearchDropdown(fieldName, options, searchTerm) {
+  const dropdownList = $('dropdown-list-' + fieldName);
+  if (!dropdownList) return;
+
+  dropdownList.innerHTML = '';
+  const searchLower = searchTerm.toLowerCase();
+  const filtered = (options || []).filter(function (item) {
+    return String(item).toLowerCase().includes(searchLower);
+  });
+
+  const currentInput = $('field_' + fieldName);
+  const currentValue = currentInput ? currentInput.value : '';
+
+  filtered.slice(0, 120).forEach(function (itemValue) {
+    const item = document.createElement('div');
+    item.className = 'search-dropdown-item';
+    if (String(itemValue).toLowerCase() === String(currentValue).toLowerCase()) {
+      item.classList.add('selected');
+    }
+    item.textContent = itemValue;
+    item.addEventListener('click', function () {
+      const input = $('field_' + fieldName);
+      if (input) input.value = itemValue;
+      dropdownList.classList.remove('active');
+    });
+    dropdownList.appendChild(item);
+  });
+
+  if (!filtered.length) {
+    const empty = document.createElement('div');
+    empty.className = 'search-dropdown-item';
+    empty.textContent = 'No matches found';
+    empty.style.color = '#888';
+    empty.style.cursor = 'default';
+    dropdownList.appendChild(empty);
+  }
+}
+
 function renderFields() {
   const category = $('categorySelect').value;
   const action = ACTIONS[category][$('actionSelect').value];
@@ -742,6 +878,16 @@ function renderFields() {
     const label = document.createElement('label');
     label.textContent = FIELD_LABELS[field] || field;
     fieldsDiv.appendChild(label);
+
+    if (field === 'country') {
+      fieldsDiv.appendChild(createCountryDropdown());
+      return;
+    }
+
+    if (field === 'indicator' && INDICATORS.length) {
+      fieldsDiv.appendChild(createIndicatorDropdown());
+      return;
+    }
 
     const input = document.createElement('input');
     input.id = 'field_' + field;
@@ -876,7 +1022,12 @@ function initialize() {
   showSpinner();
 
   google.script.run
-    .withSuccessHandler(function (state) {
+    .withSuccessHandler(function (lookup) {
+      COUNTRIES = Array.isArray(lookup && lookup.countries) ? lookup.countries : [];
+      INDICATORS = Array.isArray(lookup && lookup.indicators) ? lookup.indicators : [];
+
+      google.script.run
+        .withSuccessHandler(function (state) {
       if (!state.hasApiKey) {
         show('setupView');
         return;
@@ -902,6 +1053,12 @@ function initialize() {
       alert(err.message);
     })
     .getAppState();
+        })
+        .withFailureHandler(function (err) {
+          show('setupView');
+          alert('Error loading countries/indicators: ' + err.message);
+        })
+        .getLookupData();
 }
 
 $('categorySelect').addEventListener('change', renderActions);

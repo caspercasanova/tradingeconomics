@@ -44,6 +44,13 @@ function getAppState() {
   return { hasApiKey: !!key };
 }
 
+function getLookupData() {
+  return {
+    countries: getCountries(),
+    indicators: getIndicators()
+  };
+}
+
 function isValidApiKeyFormat_(key) {
   return /^[A-Za-z0-9]{8,64}:[A-Za-z0-9]{8,64}$/.test(key);
 }
