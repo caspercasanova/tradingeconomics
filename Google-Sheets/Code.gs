@@ -47,7 +47,8 @@ function getAppState() {
 function getLookupData() {
   return {
     countries: getCountries(),
-    indicators: getIndicators()
+    indicators: getIndicators(),
+    tickers: getTickers()
   };
 }
 
@@ -70,9 +71,10 @@ function clearApiKey() {
   return { success: true };
 }
 
-function runApiRequest(path) {
+function runApiRequest(path, format) {
   path = String(path || '').trim();
   if (!path) throw new Error('Invalid request.');
+  format = format || 'default';
 
   var key = PropertiesService.getUserProperties().getProperty('TE_API_KEY') || '';
   if (!key) throw new Error('No API key found. Please set your API key first.');
@@ -110,7 +112,11 @@ function runApiRequest(path) {
   }
 
   var json = JSON.parse(body);
-  printData(json);
+  if (format === 'pivot') {
+    printPivotData(json);
+  } else {
+    printData(json);
+  }
   return { success: true };
 }
 
@@ -135,4 +141,53 @@ function printData(data) {
 
   sheet.getRange(startRow, startCol, 1, headers.length).setValues([headers]);
   sheet.getRange(startRow + 1, startCol, rows.length, headers.length).setValues(rows);
+}
+
+function printPivotData(data) {
+  if (!Array.isArray(data)) data = [data];
+  if (!data.length) throw new Error('The API returned an empty dataset. Try adjusting your filters or parameters.');
+
+  var dateMap = {};
+  var seriesNames = [];
+  var seriesSet = {};
+
+  data.forEach(function (row) {
+    var dt = String(row.DateTime || '');
+    var country = String(row.Country || '');
+    var category = String(row.Category || '');
+    var series = country + ' ' + category;
+    var value = row.Value;
+
+    if (!seriesSet[series]) {
+      seriesSet[series] = true;
+      seriesNames.push(series);
+    }
+
+    if (!dateMap[dt]) dateMap[dt] = {};
+    dateMap[dt][series] = (value === null || value === undefined) ? '' : value;
+  });
+
+  var dates = Object.keys(dateMap).sort();
+  var headers = ['DateTime'].concat(seriesNames);
+  var rows = dates.map(function (dt) {
+    return [dt].concat(seriesNames.map(function (s) {
+      var v = dateMap[dt][s];
+      return (v === undefined) ? '' : v;
+    }));
+  });
+
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var cell = sheet.getActiveCell();
+  var startRow = cell.getRow();
+  var startCol = cell.getColumn();
+
+  sheet.getRange(startRow, startCol, 1, headers.length).setValues([headers]);
+  if (rows.length) {
+    var dataRange = sheet.getRange(startRow + 1, startCol, rows.length, headers.length);
+    dataRange.setNumberFormat('@');
+    dataRange.setValues(rows);
+    if (seriesNames.length) {
+      sheet.getRange(startRow + 1, startCol + 1, rows.length, seriesNames.length).setNumberFormat('0.##');
+    }
+  }
 }

@@ -149,6 +149,38 @@
       font-weight: 600;
     }
 
+    .tags-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #e8f5e9;
+      color: #333;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 12px;
+      max-width: 100%;
+      word-break: break-all;
+    }
+
+    .tag-remove {
+      cursor: pointer;
+      font-weight: bold;
+      color: #888;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .tag-remove:hover {
+      color: #d32f2f;
+    }
+
     .spinner-overlay {
       display: flex;
       justify-content: center;
@@ -269,6 +301,7 @@
 <script>
 let COUNTRIES = [];
 let INDICATORS = [];
+let TICKERS = [];
 
 const INITIAL_STATE = <?!= JSON.stringify(initialState || {}) ?>;
 
@@ -277,15 +310,9 @@ let hasApiKey = false;
 const ACTIONS = {
   indicators: [
     {
-      label: 'All Indicators',
-      fields: [],
-      build: function () {
-        return '/indicators';
-      }
-    },
-    {
       label: 'By Country',
       fields: ['country'],
+      multiFields: ['country'],
       build: function (v) {
         return '/country/' + encodeURIComponent(v.country);
       }
@@ -293,6 +320,7 @@ const ACTIONS = {
     {
       label: 'By Indicator',
       fields: ['indicator'],
+      multiFields: ['indicator'],
       build: function (v) {
         return '/country/all/' + encodeURIComponent(v.indicator);
       }
@@ -300,6 +328,7 @@ const ACTIONS = {
     {
       label: 'By Ticker',
       fields: ['ticker'],
+      multiFields: ['ticker'],
       build: function (v) {
         return '/country/ticker/' + encodeURIComponent(v.ticker);
       }
@@ -307,6 +336,8 @@ const ACTIONS = {
     {
       label: 'Historical',
       fields: ['country', 'indicator', 'startDate', 'endDate'],
+      multiFields: ['country', 'indicator'],
+      pivot: true,
       build: function (v) {
         return '/historical/country/' + encodeURIComponent(v.country) +
           '/indicator/' + encodeURIComponent(v.indicator) +
@@ -325,6 +356,13 @@ const ACTIONS = {
       fields: ['country'],
       build: function (v) {
         return '/ratings/' + encodeURIComponent(v.country);
+      }
+    },
+    {
+      label: 'All Indicators',
+      fields: [],
+      build: function () {
+        return '/indicators';
       }
     },
     {
@@ -785,26 +823,45 @@ function renderActions() {
   renderFields();
 }
 
-function createCountryDropdown() {
-  return createSearchDropdown('country', COUNTRIES, 'Search countries...');
+var multiSelectState = {};
+
+function createCountryDropdown(multi) {
+  return createSearchDropdown('country', COUNTRIES, 'Search countries...', multi);
 }
 
-function createIndicatorDropdown() {
-  return createSearchDropdown('indicator', INDICATORS, 'Search indicators...');
+function createIndicatorDropdown(multi) {
+  return createSearchDropdown('indicator', INDICATORS, 'Search indicators...', multi);
 }
 
-function createSearchDropdown(fieldName, options, placeholder) {
-  const wrapper = document.createElement('div');
+function createTickerDropdown(multi) {
+  return createSearchDropdown('ticker', TICKERS, 'Search tickers...', multi);
+}
+
+function createSearchDropdown(fieldName, options, placeholder, multi) {
+  var uid = fieldName + '_' + Date.now();
+  if (multi) multiSelectState[fieldName] = multiSelectState[fieldName] || [];
+
+  var wrapper = document.createElement('div');
   wrapper.className = 'search-dropdown-wrap';
 
-  const searchInput = document.createElement('input');
+  var tagsDiv = null;
+  if (multi) {
+    tagsDiv = document.createElement('div');
+    tagsDiv.className = 'tags-wrap';
+    tagsDiv.id = 'tags-' + fieldName;
+    wrapper.appendChild(tagsDiv);
+    renderTags(fieldName, options, tagsDiv);
+  }
+
+  var searchInput = document.createElement('input');
   searchInput.className = 'search-input';
   searchInput.id = 'field_' + fieldName;
   searchInput.type = 'text';
   searchInput.placeholder = placeholder || 'Search...';
   searchInput.autocomplete = 'off';
+  if (multi) searchInput.dataset.multi = '1';
 
-  const dropdownList = document.createElement('div');
+  var dropdownList = document.createElement('div');
   dropdownList.className = 'search-dropdown-list';
   dropdownList.id = 'dropdown-list-' + fieldName;
 
@@ -812,12 +869,12 @@ function createSearchDropdown(fieldName, options, placeholder) {
   wrapper.appendChild(dropdownList);
 
   searchInput.addEventListener('focus', function () {
-    renderSearchDropdown(fieldName, options, '');
+    renderSearchDropdown(fieldName, options, '', multi);
     dropdownList.classList.add('active');
   });
 
   searchInput.addEventListener('input', function () {
-    renderSearchDropdown(fieldName, options, this.value);
+    renderSearchDropdown(fieldName, options, this.value, multi);
     dropdownList.classList.add('active');
   });
 
@@ -830,36 +887,84 @@ function createSearchDropdown(fieldName, options, placeholder) {
   return wrapper;
 }
 
-function renderSearchDropdown(fieldName, options, searchTerm) {
-  const dropdownList = $('dropdown-list-' + fieldName);
+function renderTags(fieldName, options, tagsDiv) {
+  if (!tagsDiv) tagsDiv = $('tags-' + fieldName);
+  if (!tagsDiv) return;
+  var selected = multiSelectState[fieldName] || [];
+  tagsDiv.innerHTML = '';
+  selected.forEach(function (val) {
+    var tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.textContent = val;
+    var remove = document.createElement('span');
+    remove.className = 'tag-remove';
+    remove.textContent = '\u00d7';
+    remove.addEventListener('click', function () {
+      var arr = multiSelectState[fieldName] || [];
+      multiSelectState[fieldName] = arr.filter(function (v) { return v !== val; });
+      renderTags(fieldName, options);
+      var dl = $('dropdown-list-' + fieldName);
+      if (dl && dl.classList.contains('active')) {
+        var input = $('field_' + fieldName);
+        renderSearchDropdown(fieldName, options, input ? input.value : '', true);
+      }
+    });
+    tag.appendChild(remove);
+    tagsDiv.appendChild(tag);
+  });
+}
+
+function renderSearchDropdown(fieldName, options, searchTerm, multi) {
+  var dropdownList = $('dropdown-list-' + fieldName);
   if (!dropdownList) return;
 
   dropdownList.innerHTML = '';
-  const searchLower = searchTerm.toLowerCase();
-  const filtered = (options || []).filter(function (item) {
+  var searchLower = searchTerm.toLowerCase();
+  var filtered = (options || []).filter(function (item) {
     return String(item).toLowerCase().includes(searchLower);
   });
 
-  const currentInput = $('field_' + fieldName);
-  const currentValue = currentInput ? currentInput.value : '';
+  var currentInput = $('field_' + fieldName);
+  var selected = multi ? (multiSelectState[fieldName] || []) : [];
+  var currentValue = (!multi && currentInput) ? currentInput.value : '';
 
   filtered.slice(0, 120).forEach(function (itemValue) {
-    const item = document.createElement('div');
+    var item = document.createElement('div');
     item.className = 'search-dropdown-item';
-    if (String(itemValue).toLowerCase() === String(currentValue).toLowerCase()) {
-      item.classList.add('selected');
+    if (multi) {
+      if (selected.indexOf(itemValue) >= 0) item.classList.add('selected');
+    } else {
+      if (String(itemValue).toLowerCase() === String(currentValue).toLowerCase()) {
+        item.classList.add('selected');
+      }
     }
     item.textContent = itemValue;
     item.addEventListener('click', function () {
-      const input = $('field_' + fieldName);
-      if (input) input.value = itemValue;
-      dropdownList.classList.remove('active');
+      if (multi) {
+        var arr = multiSelectState[fieldName] || [];
+        var idx = arr.indexOf(itemValue);
+        if (idx >= 0) {
+          arr.splice(idx, 1);
+        } else {
+          arr.push(itemValue);
+        }
+        multiSelectState[fieldName] = arr;
+        renderTags(fieldName, options);
+        item.classList.toggle('selected');
+        if (currentInput) currentInput.value = '';
+        renderSearchDropdown(fieldName, options, '', true);
+        dropdownList.classList.add('active');
+        if (currentInput) currentInput.focus();
+      } else {
+        if (currentInput) currentInput.value = itemValue;
+        dropdownList.classList.remove('active');
+      }
     });
     dropdownList.appendChild(item);
   });
 
   if (!filtered.length) {
-    const empty = document.createElement('div');
+    var empty = document.createElement('div');
     empty.className = 'search-dropdown-item';
     empty.textContent = 'No matches found';
     empty.style.color = '#888';
@@ -869,10 +974,11 @@ function renderSearchDropdown(fieldName, options, searchTerm) {
 }
 
 function renderFields() {
-  const category = $('categorySelect').value;
-  const action = ACTIONS[category][$('actionSelect').value];
-  const fieldsDiv = $('fields');
+  var category = $('categorySelect').value;
+  var action = ACTIONS[category][$('actionSelect').value];
+  var fieldsDiv = $('fields');
   fieldsDiv.innerHTML = '';
+  multiSelectState = {};
 
   (action.fields || []).forEach(function (field) {
     const label = document.createElement('label');
@@ -880,12 +986,20 @@ function renderFields() {
     fieldsDiv.appendChild(label);
 
     if (field === 'country') {
-      fieldsDiv.appendChild(createCountryDropdown());
+      var multiCountry = category === 'indicators' && action.multiFields && action.multiFields.indexOf('country') >= 0;
+      fieldsDiv.appendChild(createCountryDropdown(multiCountry));
       return;
     }
 
     if (field === 'indicator' && INDICATORS.length) {
-      fieldsDiv.appendChild(createIndicatorDropdown());
+      var multiIndicator = category === 'indicators' && action.multiFields && action.multiFields.indexOf('indicator') >= 0;
+      fieldsDiv.appendChild(createIndicatorDropdown(multiIndicator));
+      return;
+    }
+
+    if (field === 'ticker' && TICKERS.length) {
+      var multiTicker = category === 'indicators' && action.multiFields && action.multiFields.indexOf('ticker') >= 0;
+      fieldsDiv.appendChild(createTickerDropdown(multiTicker));
       return;
     }
 
@@ -907,12 +1021,17 @@ function renderFields() {
 }
 
 function getFieldValues() {
-  const category = $('categorySelect').value;
-  const action = ACTIONS[category][$('actionSelect').value];
-  const values = {};
+  var category = $('categorySelect').value;
+  var action = ACTIONS[category][$('actionSelect').value];
+  var values = {};
+  var multiFields = action.multiFields || [];
 
   (action.fields || []).forEach(function (field) {
-    values[field] = $('field_' + field).value.trim();
+    if (multiFields.indexOf(field) >= 0 && multiSelectState[field] && multiSelectState[field].length) {
+      values[field] = multiSelectState[field].join(',');
+    } else {
+      values[field] = $('field_' + field).value.trim();
+    }
   });
 
   return values;
@@ -933,6 +1052,7 @@ function runSelectedAction() {
   }
 
   const path = action.build(values);
+  const format = action.pivot ? 'pivot' : 'default';
   const btn = $('runBtn');
   btn.disabled = true;
   showSpinner();
@@ -947,7 +1067,7 @@ function runSelectedAction() {
       show('appView');
       alert(err.message);
     })
-    .runApiRequest(path);
+    .runApiRequest(path, format);
 }
 
 function isApiKeyFormatValid(key) {
@@ -1025,6 +1145,7 @@ function initialize() {
     .withSuccessHandler(function (lookup) {
       COUNTRIES = Array.isArray(lookup && lookup.countries) ? lookup.countries : [];
       INDICATORS = Array.isArray(lookup && lookup.indicators) ? lookup.indicators : [];
+      TICKERS = Array.isArray(lookup && lookup.tickers) ? lookup.tickers : [];
 
       google.script.run
         .withSuccessHandler(function (state) {
