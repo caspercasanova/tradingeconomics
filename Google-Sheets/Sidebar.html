@@ -621,27 +621,6 @@ const ACTIONS = {
 
   comtrade: [
     {
-      label: 'Categories',
-      fields: [],
-      build: function () {
-        return '/comtrade/categories';
-      }
-    },
-    {
-      label: 'Countries',
-      fields: [],
-      build: function () {
-        return '/comtrade/countries';
-      }
-    },
-    {
-      label: 'By Country',
-      fields: ['country'],
-      build: function (v) {
-        return '/comtrade/country/' + encodeURIComponent(v.country);
-      }
-    },
-    {
       label: 'Historical',
       fields: ['symbol'],
       build: function (v) {
