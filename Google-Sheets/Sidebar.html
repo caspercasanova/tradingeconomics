@@ -1084,18 +1084,9 @@ function saveFirstKey() {
 
   google.script.run
     .withSuccessHandler(function () {
-      if (INITIAL_STATE.view === 'settings') {
-        showSettingsView();
-        return;
-      }
-
       show('appView');
+      $('categorySelect').value = 'indicators';
       renderActions();
-
-      if (INITIAL_STATE.category && ACTIONS[INITIAL_STATE.category]) {
-        $('categorySelect').value = INITIAL_STATE.category;
-        renderActions();
-      }
     })
     .withFailureHandler(function (err) {
       show('setupView');
@@ -1115,7 +1106,9 @@ function updateKey() {
   google.script.run
     .withSuccessHandler(function () {
       hasApiKey = true;
-      showSettingsView();
+      show('appView');
+      $('categorySelect').value = 'indicators';
+      renderActions();
     })
     .withFailureHandler(function (err) {
       showSettingsView();
