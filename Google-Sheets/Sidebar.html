@@ -985,6 +985,9 @@ function renderFields() {
 
     if (field === 'startDate' || field === 'endDate') {
       input.type = 'date';
+      var d = new Date();
+      if (field === 'startDate') d.setDate(d.getDate() - 365);
+      input.value = d.toISOString().slice(0, 10);
     } else if (field === 'fromDateTime' || field === 'toDateTime') {
       input.type = 'datetime-local';
     } else if (field === 'startIndex' || field === 'listSize') {
