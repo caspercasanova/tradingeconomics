@@ -13,7 +13,59 @@ This add-on connects Google Sheets to the [Trading Economics API](https://tradin
 
 <br>
 
-## Step 1 — Open the Apps Script Editor
+## Installation
+
+### Method 1 — Install from Google Workspace Marketplace
+
+Use this method to install the add-on directly from Google Sheets in a few clicks.
+
+#### Step 1 — Open the Add-ons Marketplace
+
+1. Open a Google Sheets spreadsheet.
+2. Go to **Extensions → Add-ons → Get add-ons**.
+
+![Extensions → Add-ons → Get add-ons](assets/add-on-8.png)
+
+3. In the Google Workspace Marketplace, search for **Trading Economics**.
+4. Click **Install** on **TRADING ECONOMICS Sheets Add-on**.
+
+![TRADING ECONOMICS Sheets Add-on listing](assets/add-on-10.png)
+
+#### Step 2 — Sign In Popup
+
+A Google popup will appear asking you to sign in to the **TRADING ECONOMICS Sheets Add-on**.
+
+1. Click **Continue**.
+
+![Sign in popup — click Continue](assets/add-on-11.png)
+
+#### Step 3 — Grant Permissions
+
+In the next Google popup, grant the required access permissions.
+
+1. Click **Select all**.
+2. Click **Continue**.
+
+![Permission selection — select all](assets/add-on-12.png)
+
+#### Step 4 — Open the Add-On
+
+After the permissions are accepted:
+
+1. Go to **Extensions**.
+2. Click **TRADING ECONOMICS Sheets Addon** to access indicators, calendar, markets, and settings.
+
+![Extensions → TRADING ECONOMICS Sheets Addon](assets/add-on-14.png)
+
+3. Click **Settings** and enter your [Trading Economics API key](https://tradingeconomics.com/api/pricing.aspx?source=google-sheets) to start fetching data.
+
+<br>
+
+### Method 2 — Manual Installation via Apps Script
+
+Use this method if you prefer to set up the add-on manually using the Apps Script editor.
+
+#### Step 1 — Open the Apps Script Editor
 
 1. Open your Google Sheets spreadsheet.
 2. In the menu bar, go to **Extensions → Apps Script**.
@@ -24,18 +76,21 @@ This add-on connects Google Sheets to the [Trading Economics API](https://tradin
 
 <br>
 
-## Step 2 — Add the Script Code
+#### Step 2 — Add the Script Code
 
 1. In the Apps Script editor, click on the default **`Code.gs`** file in the left panel.
 2. Delete all existing content in the editor.
 3. Copy the full contents of **[`Code.gs`](Code.gs)** from this repository and paste it into the editor.
 4. Press **Ctrl + S** (or **Cmd + S** on Mac) to save.
+5. Click the **"+"** icon next to **"Files"**, select **"Script"**, and name it **`data`**.
+6. Copy the full contents of **[`data.gs`](data.gs)** from this repository and paste it in.
+7. Press **Ctrl + S** to save.
 
 ![b](https://github.com/tradingeconomics/tradingeconomics/assets/61524606/5964ee0f-b71b-42be-96b5-fcaf6e140282)
 
 <br>
 
-## Step 3 — Configure the Manifest (appsscript.json)
+#### Step 3 — Configure the Manifest (appsscript.json)
 
 The `appsscript.json` manifest declares the OAuth permissions the add-on needs to communicate with Google Sheets and the Trading Economics API.
 
@@ -65,7 +120,7 @@ The `appsscript.json` manifest declares the OAuth permissions the add-on needs t
 
 <br>
 
-## Step 4 — Add the Sidebar HTML File
+#### Step 4 — Add the Sidebar HTML File
 
 1. In the Apps Script editor, click the **"+"** icon next to **"Files"** in the left panel.
 2. Select **"HTML"** from the dropdown.
@@ -82,7 +137,7 @@ The `appsscript.json` manifest declares the OAuth permissions the add-on needs t
 
 <br>
 
-## Step 5 — Activate the Add-On
+#### Step 5 — Activate the Add-On
 
 1. Go back to your Google Sheets spreadsheet and **refresh the page**.
 2. After a few seconds, a new **"TE"** menu will appear in the menu bar between **"Help"** and the right edge.
