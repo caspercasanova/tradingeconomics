@@ -7,6 +7,11 @@
       font-family: Arial, sans-serif;
       padding: 14px;
       color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      margin: 0;
     }
 
     .hidden {
@@ -202,7 +207,7 @@
     }
 
     footer {
-      margin-top: 16px;
+      margin-top: auto;
       padding: 14px 0 4px 0;
       border-top: 1px solid #e6e6e6;
       font-size: 12px;
@@ -627,13 +632,6 @@ const ACTIONS = {
       fields: [],
       build: function () {
         return '/comtrade/countries';
-      }
-    },
-    {
-      label: 'Updates',
-      fields: [],
-      build: function () {
-        return '/comtrade/updates';
       }
     },
     {
